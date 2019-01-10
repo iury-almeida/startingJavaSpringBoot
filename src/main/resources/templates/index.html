@@ -1,10 +1,15 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="ISO-8859-1"></meta>
-<title>Insert title here</title>
+<meta charset="utf-8"></meta>
+<title>Java Spring Boot</title>
+<link rel="stylesheet" href="/webjars/bootstrap/css/bootstrap.min.css"/>
+<script src="/webjars/jquery/3.1.1-1/jquery.min.js"></script>
 </head>
 <body>
+	<div th:replace="fragmentos/fragmentos :: header"></div>
 	<span th:text="'Mensagem do servido: ' + ${mensagem}"></span>
+	<input type="text" class="form-control"/>
+	<div th:replace="fragmentos/fragmentos :: footer"></div>
 </body>
 </html>

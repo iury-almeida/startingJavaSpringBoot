@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8"></meta>
+<title>Alunos Java Spring Boot</title>
+<link rel="stylesheet" href="/webjars/bootstrap/css/bootstrap.min.css"/>
+</head>
+<body>
+	<div th:replace="fragmentos/fragmentos :: header"></div>
+	
+	<div class="container">
+		<h2>Lista de alunos cadastradas</h2>
+		<a href="/alunos/inserir" class="btn btn-default">Criar novo aluno...</a>
+		 
+		<div class="row">
+			<div class="form-group col-md-12">
+				<label for="txt-pesquisa-aluno">Aluno a ser pesquisado:</label>
+				<input type="text" class="form-control" id="txt-pesquisa-aluno"></input>
+				<button type="button" class="btn btn-default" id="btn-pesquisa-aluno">Pesquisar</button>
+			</div>
+		</div>
+		 
+		<table class="table" id="tbl-alunos">
+		<thead>
+			<th>Nome do aluno</th>
+			<th>Idade</th>
+			<th>Instituição</th>
+			<th>Ações</th>
+		</thead>
+		<tbody>
+			<tr th:each="aluno: ${alunos}">
+				<td th:text="${aluno.nome}"></td>
+				<td th:text="${aluno.idade}"></td>
+				<td th:text="${aluno.instituicao.nome}"></td>
+				<td>
+					<a th:href="@{/alunos/editar/{id}(id=${aluno.id})}">Editar</a> |
+					<a th:href="@{/alunos/excluir/{id}(id=${aluno.id})}">Excluir</a>
+				</td>
+			</tr>
+		</tbody>
+		</table>
+	</div>
+	
+	
+	<div th:replace="fragmentos/fragmentos :: footer"></div>
+	<script src="/webjars/jquery/3.1.1-1/jquery.min.js"></script>
+	
+	<script type="text/javascript">
+		
+	$(document).ready(function(){
+		
+		$("#btn-pesquisa-aluno").click(function() {
+			$.ajax({
+				method: "GET",
+				url: "/alunos/pesquisar-por-nome/" + $("#txt-pesquisa-aluno").val(),
+				success: function(data){
+					$("#tbl-alunos tbody > tr").remove();
+					$.each(data, function(){
+						$("#tbl-alunos tbody").append(
+							'<tr>' +
+								'<td>' + this.nome + '</td>' + 
+								'<td>' + this.idade + '</td>' +
+								'<td>' + this.instituicao.nome + '</td>' +
+								'<td>' + 
+									'<a th:href="@{/instituicoes/editar/' + this.id + '}">Editar</a> | ' +
+									'<a th:href="@{/instituicoes/excluir/ ' + this.id + '}">Excluir</a>' +
+								'</td>' +
+							'</tr>'
+						);
+					})
+				},
+				error: function(){
+					alert("Não foi possível executar a operação solicitada.");					
+				}
+			})
+		})
+		
+	})
+		
+	
+	</script>
+</body>
+</html>
